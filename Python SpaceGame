@@ -1,0 +1,68 @@
+import pygame
+from sys import exit
+
+pygame.init()
+screen = pygame.display.set_mode((400,800))
+pygame.display.set_caption("MyGame")
+clock = pygame.time.Clock()
+test_font = pygame.font.Font('graphics/munro.ttf',50)
+
+
+space_surf = pygame.image.load('graphics/6700775.png').convert_alpha()
+
+gameo_surf = test_font.render('Game Over', False, 'White').convert_alpha()
+
+
+ground_surf = pygame.image.load('graphics/rock.jpg').convert_alpha()
+ground_rect = ground_surf.get_rect(topright = (400,750))
+
+text_surf = test_font.render('Basement', False, 'White').convert_alpha()
+
+pourcentage = (100)
+hbasement_surf = test_font.render(str(pourcentage), False, 'White').convert_alpha()
+hbasement_rect = hbasement_surf.get_rect(topright = (370,750))
+
+
+asteroid_surf = pygame.image.load('graphics/asteroid.png').convert_alpha()
+asteroid_rect = asteroid_surf.get_rect(midright = (200,-150))
+
+
+player_surf = pygame.image.load('graphics/spaceship.png').convert_alpha()
+player_rect = player_surf.get_rect(midbottom = (200,750))
+
+
+while True:
+    for event in pygame.event.get():
+    	if event.type == pygame.QUIT:
+    	    pygame.quit()
+    	    exit()
+    
+    
+    screen.blit(space_surf,(0,0))
+    screen.blit(ground_surf,ground_rect)
+    screen.blit(text_surf, (0,750))
+    screen.blit(hbasement_surf,hbasement_rect)
+    
+    asteroid_rect.bottom += 20
+    if asteroid_rect.bottom >= 950:
+    asteroid_rect.bottom = -150
+    screen.blit(asteroid_surf,asteroid_rect)
+    screen.blit(player_surf,player_rect)
+    
+    
+    if ground_rect.colliderect(asteroid_rect):
+        pourcentage -= 10
+        hbasement_surf = test_font.render(str(pourcentage), False, 'White').convert_alpha()
+        asteroid_rect.bottom = -150
+        continue
+
+    if pourcentage == 0:
+        screen.blit(gameo_surf, (90,200))
+        asteroid_rect = False
+	
+           
+    pygame.display.update()
+    clock.tick(60)
+    
+    
+    
